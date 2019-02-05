@@ -1,0 +1,58 @@
+{
+    "name": "laraboost/laraboost",
+    "description": "A package to help scaffold out your Laravel Application",
+    "keywords": [
+        "laraboost"
+    ],
+    "homepage": "https://github.com/laraboost/laraboost",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Vince Mitchell",
+            "email": "vincent.mitchell@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Joe Fusco",
+            "email": "joe.afusco@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "illuminate/support": "5.7.*"
+    },
+    "require-dev": {
+        "orchestra/testbench": "3.7.*",
+        "phpunit/phpunit": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laraboost\\Laraboost\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Laraboost\\Laraboost\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Laraboost\\Laraboost\\LaraboostServiceProvider"
+            ],
+            "aliases": {
+                "Laraboost": "Laraboost\\Laraboost\\LaraboostFacade"
+            }
+        }
+    }
+}
