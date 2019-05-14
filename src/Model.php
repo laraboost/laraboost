@@ -9,6 +9,7 @@ class Model
     public $name;
     public $columns;
     public $table_name;
+    public $plural_name;
     public $relationships;
 
     public function __construct($filename)
@@ -16,11 +17,10 @@ class Model
         $file_path = base_path('.laraboost/models/' . $filename . '.json');
         $config = json_decode(file_get_contents($file_path));
 
-        $this->name = $config->name;
-        $this->table_name = $config->table_name;
-        $this->columns = $config->columns;
-        $this->relationships = $config->relationships;
-        // load config from file based on filename
+        $this->name = $config->name ?? '';
+        $this->table_name = $config->table_name ?? '';
+        $this->columns = $config->columns ?? [];
+        $this->relationships = $config->relationships ?? [];
     }
 
     public static function get($filename)
@@ -30,15 +30,37 @@ class Model
 
     public static function create($name)
     {
-        file_put_contents(
-            base_path('.laraboost/models/' . $name . '.json'),
-            Compiler::stub('configs/model.json', [
-                'name' => $name,
-                'plural_name' => Str::lower(Str::plural($name))
-            ])
-        );
+        file_put_contents(base_path('.laraboost/models/' . $name . '.json'), []);
 
-        return self::get($name);
+        $model = self::get($name);
+        $model->name = $name;
+        $model->table_name = Str::lower(Str::plural($name));
+        $model->plural_name = Str::lower(Str::plural($name));
+        $model->columns = [
+            [
+                'name' => 'id',
+                'type' => 'increments'
+            ]
+        ];
+        $model->save();
+    }
+
+    public function addColumn($values)
+    {
+        array_push($this->columns, $values);
+    }
+
+    public function addColumns(Array $array)
+    {
+        array_merge($this->columns, $array);
+    }
+
+    public function save()
+    {
+        file_put_contents(
+            base_path('.laraboost/models/' . $this->name . '.json'),
+            $this
+        );
     }
 
     public function __toString()
@@ -46,6 +68,7 @@ class Model
         return json_encode([
             'name' => $this->name,
             'table_name' => $this->table_name,
+            'plural_name' => $this->plural_name,
             'columns' => $this->columns,
             'relationships' => $this->relationships,
         ]);
