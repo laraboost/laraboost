@@ -11,7 +11,7 @@ class InstallLaraboost extends Command
      *
      * @var string
      */
-    protected $signature = 'laraboost:install';
+    protected $signature = 'boost';
 
     /**
      * The console command description.
@@ -41,12 +41,18 @@ class InstallLaraboost extends Command
             '.laraboost',
             '.laraboost/models',
         ];
-
-        collect($directories)->each(function ($dir) {
+        $bar = $this->output->createProgressBar(count($directories));
+        $this->comment('Installing Laraboost...');
+        $bar->start();
+        collect($directories)->each(function ($dir) use ($bar) {
             $path = base_path($dir);
             if (!is_dir($path)) {
                 mkdir($path);
             }
+            $bar->advance();
         });
+        $bar->finish();
+        $this->line('');
+        $this->info('Installation Complete...');
     }
 }
