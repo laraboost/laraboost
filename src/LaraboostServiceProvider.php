@@ -4,6 +4,7 @@ namespace Laraboost;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Laraboost\Console\Commands\InstallLaraboost;
 
 class LaraboostServiceProvider extends ServiceProvider
 {
@@ -35,6 +36,7 @@ class LaraboostServiceProvider extends ServiceProvider
             define('LARABOOST_PATH', realpath(__DIR__ . '/../'));
         }
 
+        $this->registerCommands();
         $this->configure();
     }
 
@@ -44,6 +46,11 @@ class LaraboostServiceProvider extends ServiceProvider
             __DIR__ . '/../config/laraboost.php',
             'laraboost'
         );
+    }
+
+    protected function registerCommands()
+    {
+        $this->commands(InstallLaraboost::class);
     }
 
     protected function registerResources()

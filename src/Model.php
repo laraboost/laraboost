@@ -2,7 +2,6 @@
 
 namespace Laraboost;
 
-use Laraboost\Compiler;
 use Illuminate\Support\Str;
 
 class Model
@@ -45,10 +44,10 @@ class Model
     public function __toString()
     {
         return json_encode([
-            "name" => $this->name,
-            "table_name" => $this->table_name,
-            "columns" => $this->columns,
-            "relationships" => $this->relationships,
+            'name' => $this->name,
+            'table_name' => $this->table_name,
+            'columns' => $this->columns,
+            'relationships' => $this->relationships,
         ]);
     }
 }
