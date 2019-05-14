@@ -2,6 +2,7 @@
 
 namespace Laraboost;
 
+use Laraboost\Laraboost;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laraboost\Console\Commands\InstallLaraboost;
@@ -35,6 +36,11 @@ class LaraboostServiceProvider extends ServiceProvider
         if (!defined('LARABOOST_PATH')) {
             define('LARABOOST_PATH', realpath(__DIR__ . '/../'));
         }
+
+        $this->app->singleton('laraboost', function () {
+            return new Laraboost();
+        });
+
 
         $this->registerCommands();
         $this->configure();

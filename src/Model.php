@@ -2,6 +2,7 @@
 
 namespace Laraboost;
 
+use Laraboost;
 use Illuminate\Support\Str;
 
 class Model
@@ -61,6 +62,7 @@ class Model
             base_path('.laraboost/models/' . $this->name . '.json'),
             $this
         );
+        Laraboost::indexModels();
     }
 
     public function __toString()
