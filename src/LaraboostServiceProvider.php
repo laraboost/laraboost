@@ -1,7 +1,8 @@
 <?php
 
-namespace Laraboost\Laraboost;
+namespace Laraboost;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class LaraboostServiceProvider extends ServiceProvider
@@ -11,50 +12,61 @@ class LaraboostServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->registerRoutes();
+        $this->registerResources();
+
         /*
          * Optional methods to load your package assets
          */
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'laraboost');
         // $this->loadViewsFrom(__DIR__.'/../resources/views', 'laraboost');
         // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('laraboost.php'),
+                __DIR__ . '/../config/laraboost.php' => config_path('laraboost.php'),
             ], 'config');
-
-            // Publishing the views.
-            /*$this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/vendor/laraboost'),
-            ], 'views');*/
-
-            // Publishing assets.
-            /*$this->publishes([
-                __DIR__.'/../resources/assets' => public_path('vendor/laraboost'),
-            ], 'assets');*/
-
-            // Publishing the translation files.
-            /*$this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/laraboost'),
-            ], 'lang');*/
-
-            // Registering package commands.
-            // $this->commands([]);
         }
     }
 
-    /**
-     * Register the application services.
-     */
     public function register()
     {
-        // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laraboost');
+        if (!defined('LARABOOST_PATH')) {
+            define('LARABOOST_PATH', realpath(__DIR__ . '/../'));
+        }
 
-        // Register the main class to use with the facade
-        $this->app->singleton('laraboost', function () {
-            return new Laraboost;
+        $this->configure();
+    }
+
+    protected function configure()
+    {
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/laraboost.php',
+            'laraboost'
+        );
+    }
+
+    protected function registerResources()
+    {
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'laraboost');
+    }
+
+    protected function registerRoutes()
+    {
+        Route::group([
+            'prefix' => 'laraboost',
+            'namespace' => 'Laraboost\Http\Controllers',
+            // 'middleware' => ['web', 'auth'],
+        ], function () {
+            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        });
+
+        Route::group([
+            'prefix' => 'laraboost/api',
+            'namespace' => 'Laraboost\Http\Controllers',
+            'middleware' => ['auth:api'],
+        ], function () {
+            $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
         });
     }
 }

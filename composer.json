@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": "^7.1",
-        "illuminate/support": "5.7.*"
+        "illuminate/support": "5.8.*"
     },
     "require-dev": {
         "orchestra/testbench": "3.7.*",
@@ -29,12 +29,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Laraboost\\Laraboost\\": "src"
+            "Laraboost\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Laraboost\\Laraboost\\Tests\\": "tests"
+            "Laraboost\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -48,10 +48,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Laraboost\\Laraboost\\LaraboostServiceProvider"
+                "Laraboost\\LaraboostServiceProvider"
             ],
             "aliases": {
-                "Laraboost": "Laraboost\\Laraboost\\LaraboostFacade"
+                "Laraboost": "Laraboost\\LaraboostFacade"
             }
         }
     }

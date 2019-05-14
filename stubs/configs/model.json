@@ -1,0 +1,6 @@
+{
+    "name": "$name$",
+    "table_name": "$plural_name$",
+    "columns": [],
+    "relationships": []
+}
