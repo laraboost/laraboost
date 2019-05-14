@@ -3,6 +3,7 @@
 namespace Laraboost;
 
 use Laraboost;
+use Laraboost\Compiler;
 use Illuminate\Support\Str;
 
 class Model
@@ -62,7 +63,18 @@ class Model
             base_path('.laraboost/models/' . $this->name . '.json'),
             $this
         );
-        Laraboost::indexModels();
+
+        $this->build();
+
+        Laraboost::cacheModels();
+    }
+
+    public function build()
+    {
+        file_put_contents(
+            app_path(config('laraboost.models_path') . $this->name . '.php'),
+            Compiler::stub('Model.stub', ['name' => $this->name])
+        );
     }
 
     public function __toString()

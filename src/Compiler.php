@@ -2,8 +2,12 @@
 
 namespace Laraboost;
 
+use Illuminate\Console\DetectsApplicationNamespace;
+
 class Compiler
 {
+    use DetectsApplicationNamespace;
+
     public $stub;
     public $input_data;
     public $output_contents;
@@ -18,6 +22,8 @@ class Compiler
 
     public function compile()
     {
+        $this->input_data['namespace'] = rtrim(self::getAppNamespace(), '\\');
+
         foreach ($this->input_data as $key => $value) {
             if (!$this->withoutKeys) {
                 $value = $value . '$' . $key . '$';
